@@ -1,0 +1,30 @@
+stages:
+  - build
+  - static-code-analysis
+  - defect-dojo-import
+  - test
+
+# Include all tool-specific YAMLs
+include:
+  - local: 'trivy/trivy-image-scan.yml'
+  - local: 'trivy/trivy-fs-scan.yml'
+  - local: 'semgrep/semgrep-scan.yml'
+  - local: 'trufflehog/trufflehog-scan.yml'
+  - local: 'checkov/checkov-scan.yml'
+  - local: 'defect-dojo/defectdojo-import.yml'
+
+variables:
+  ARTIFACTORY_DOCKER_REGISTRY: "docker.example.com"
+  ARTIFACTORY_DOCKER_USERNAME: "demo-user"
+  PACKAGE_IMAGE_NAME: "docker.example.com/my-project/demo-image:latest"
+  DEFECTDOJO_URL: "https://defectdojo.example.org"
+  DEFECTDOJO_API_KEY: "REPLACE_WITH_YOUR_API_KEY"
+
+
+default:
+  tags:
+    - secuirty
+  before_script:
+    - echo "Starting CI job in $CI_JOB_NAME"
+  after_script:
+    - echo "Job $CI_JOB_NAME finished"

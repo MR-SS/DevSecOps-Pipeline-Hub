@@ -1,0 +1,20 @@
+# TruffleHog CI/CD Job
+# General secrets detection scan
+
+trufflehog_scan:
+  stage: static-code-analysis
+  tags:
+    - security
+  image: trufflesecurity/trufflehog:latest
+  variables:
+    TRUFFLEHOG_OUTPUT: trufflehog-report.json
+  script:
+    - echo "Scanning for secrets..."
+    - trufflehog filesystem --directory . --json > "$TRUFFLEHOG_OUTPUT"
+  artifacts:
+    when: always
+    paths:
+      - "$TRUFFLEHOG_OUTPUT"
+    expire_in: 1 week
+    reports:
+      secret_detection: "$TRUFFLEHOG_OUTPUT"

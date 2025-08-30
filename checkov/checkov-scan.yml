@@ -1,0 +1,24 @@
+checkov-scan:
+  stage: static-code-analysis
+  image: bridgecrew/checkov:latest
+  tags:
+    - secuirty   # Generalized tag, use your runner tag
+  variables:
+    CHECKOV_OUTPUT: checkov-report.json
+  script: |
+    # Print environment info
+    echo "CI_PROJECT_DIR: $CI_PROJECT_DIR"
+
+    # Run Checkov scan on the repo or a specific folder (Terraform / IaC files)
+    checkov -d . --output json --output-file-path "$CHECKOV_OUTPUT"
+
+    # Optional: Fail the job if high severity issues are found
+    # checkov -d . --compact --quiet --soft-fail
+
+  artifacts:
+    when: always
+    paths:
+      - "$CHECKOV_OUTPUT"
+    expire_in: 1 week
+    reports:
+      dependency_scanning: "$CHECKOV_OUTPUT"

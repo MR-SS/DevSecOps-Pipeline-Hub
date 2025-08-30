@@ -1,0 +1,24 @@
+# Trivy CI/CD Job: Container Image Scan
+# General template for scanning a Docker image
+# Replace $IMAGE_NAME with your target image
+
+trivy_image_scan:
+  stage: static-code-analysis
+  tags:
+    - security
+  image: aquasec/trivy:latest
+  variables:
+    TRIVY_OUTPUT: trivy-image.json
+  script: |
+    echo "Scanning Docker image: $IMAGE_NAME"
+    # Optional: login to your registry
+    # echo $DOCKER_PASSWORD | docker login $DOCKER_REGISTRY --username $DOCKER_USERNAME --password-stdin
+    docker pull "$IMAGE_NAME"
+    trivy image --ignore-unfixed --format json --output "$TRIVY_OUTPUT" "$IMAGE_NAME"
+  artifacts:
+    when: always
+    paths:
+      - "$TRIVY_OUTPUT"
+    expire_in: 1 week
+    reports:
+      dependency_scanning: "$TRIVY_OUTPUT"

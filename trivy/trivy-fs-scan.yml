@@ -1,0 +1,20 @@
+# Trivy Filesystem Scan
+# Scans source code or filesystem for vulnerabilities and misconfigurations
+
+trivy_fs_scan:
+  stage: static-code-analysis
+  tags:
+    - security
+  image: aquasec/trivy:latest
+  variables:
+    TRIVY_OUTPUT: trivy-fs.json
+  script:
+    - echo "Running Trivy filesystem scan..."
+    - trivy fs --ignore-unfixed --format json --output "$TRIVY_OUTPUT" .
+  artifacts:
+    when: always
+    paths:
+      - "$TRIVY_OUTPUT"
+    expire_in: 1 week
+    reports:
+      dependency_scanning: "$TRIVY_OUTPUT"

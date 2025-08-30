@@ -1,0 +1,33 @@
+# DefectDojo Generic Import Job
+# Upload scanner results to DefectDojo
+
+defectdojo_import:
+  stage: post-security
+  tags:
+    - security
+  image: curlimages/curl:latest
+  script: |
+    echo "Importing reports to DefectDojo..."
+    # Example: Trivy image report
+    curl -X POST "$DEFECTDOJO_URL/api/v2/import-scan/" \
+      -H "Authorization: Token $DEFECTDOJO_API_KEY" \
+      -F "scan_type=Trivy Scan" \
+      -F "file=@trivy/trivy-image.json" \
+      -F "engagement=$DEFECTDOJO_ENGAGEMENT_ID" \
+      -F "auto_create_context=true"
+
+    # Example: Semgrep report
+    curl -X POST "$DEFECTDOJO_URL/api/v2/import-scan/" \
+      -H "Authorization: Token $DEFECTDOJO_API_KEY" \
+      -F "scan_type=Semgrep JSON Report" \
+      -F "file=@semgrep/semgrep-report.json" \
+      -F "engagement=$DEFECTDOJO_ENGAGEMENT_ID" \
+      -F "skip_duplicates=true"
+
+    # Example: TruffleHog report
+    curl -X POST "$DEFECTDOJO_URL/api/v2/import-scan/" \
+      -H "Authorization: Token $DEFECTDOJO_API_KEY" \
+      -F "scan_type=TruffleHog Scan" \
+      -F "file=@trufflehog/trufflehog-report.json" \
+      -F "engagement=$DEFECTDOJO_ENGAGEMENT_ID" \
+      -F "skip_duplicates=true"
