@@ -4,10 +4,10 @@
 This repository contains ready-to-use GitLab CI templates for DevSecOps pipelines, fully integrated with **DefectDojo**.
 
 ## Tools Included
-- **Trivy**: Scans container images, filesystem, and configuration files for vulnerabilities.
-- **Semgrep**: Performs SAST scans with customizable rules.
-- **TruffleHog**: Detects secrets in Git repositories.
-- **DefectDojo**: Centralizes and manages all scan results.
+- [**Trivy**](https://www.aquasec.com/products/trivy/): Scans container images, filesystem, and configuration files for vulnerabilities.
+- [**Semgrep**](https://semgrep.dev/): Performs SAST scans with customizable rules.
+- [**TruffleHog**](https://github.com/trufflesecurity/trufflehog): Detects secrets in Git repositories.
+- [**DefectDojo**](https://docs.defectdojo.com/): Centralizes and manages all scan results.
 
 ## Usage
 1. Fork or clone this repository.
